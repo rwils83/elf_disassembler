@@ -4,12 +4,12 @@ from elftools.elf.relocation import RelocationSection
 from capstone import *
 import argparse
 
+
 def sections(file):
     with open(file, 'rb') as f:
         e = ELFFile(f)
         for section in e.iter_sections():
             print(hex(section['sh_addr']), section.name)
-
 
 
 def disassemble(file):
@@ -39,18 +39,16 @@ def relocations(file):
 def parse_args():
     description = "A python based ELF disassembler"    
     parser = argparse.ArgumentParser(description=description)
-
     parser.add_argument("-s", "--sections", action="store", help="Enter file to show disassembled sections")
     parser.add_argument("-d", "--disassemble", action="store", help="Enter file to disassemble.")
     parser.add_argument("-r", "--relocations", action="store", help="Enter file to display relocations in")
-
     args= parser.parse_args()
     return args
 
 
 if __name__ == "__main__":
     args = parse_args()
-    
+
     if args.sections:
         sections(args.sections)
 
