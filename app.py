@@ -1,9 +1,21 @@
+#!/usr/bin/env python3
+
 # sections.py
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 from capstone import *
 import argparse
+import sys
 
+description="An elf based disassembler"
+
+
+class MyParser(argparse.ArgumentParser):
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help()
+        sys.exit()
+        
 
 def sections(file):
     with open(file, 'rb') as f:
@@ -37,11 +49,11 @@ def relocations(file):
 
 
 def parse_args():
-    description = "A python based ELF disassembler"    
-    parser = argparse.ArgumentParser(description=description)
-    parser.add_argument("-s", "--sections", action="store", help="Enter file to show disassembled sections")
-    parser.add_argument("-d", "--disassemble", action="store", help="Enter file to disassemble.")
-    parser.add_argument("-r", "--relocations", action="store", help="Enter file to display relocations in")
+    description = "A python based ELF disassembler."    
+    parser =MyParser()
+    parser.add_argument("-s", "--sections",action="store",help="Show sections of selected file. Usage: /.app.py -s/--sections [FILENAME]")
+    parser.add_argument("-d", "--disassemble",action="store", help="Disassemble selected file. Due to large volume of output, pipe to less! Usage: /.app.py -d [FILENAME]|less")
+    parser.add_argument("-r", "--relocations",action="store", help="Show relocations of selected file. Usage: /.app.py -r/--relocations [FILENAME]")
     args= parser.parse_args()
     return args
 
